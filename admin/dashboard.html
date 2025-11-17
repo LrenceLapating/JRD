@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - FireGuard Pro</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        /* Professional Admin Dashboard Styling */
+        .admin-dashboard {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .admin-header {
+            background: rgba(44, 62, 80, 0.95);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border-bottom: 3px solid #ff6b35;
+        }
+
+        .admin-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .admin-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff6b35;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .admin-nav {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid transparent;
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-button.active {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            border-color: #ff6b35;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .logout-button {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border: none;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .logout-button:hover {
+            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .admin-content {
+            padding: 3rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .section-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: none;
+        }
+
+        .section-panel.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid #ff6b35;
+        }
+
+        .panel-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .add-button {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .add-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .data-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .data-item {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 6px solid #ff6b35;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .data-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .current-video-item {
+            border: 3px solid #ff6b35;
+            background: linear-gradient(135deg, #fff5f0 0%, #ffffff 100%);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+        }
+        
+        .current-video-item .item-title {
+            color: #ff6b35;
+            font-weight: 700;
+        }
+
+        .item-content {
+            flex: 1;
+        }
+
+        .item-title {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .item-description {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .action-button {
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .edit-button {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .delete-button {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Enhanced Form Styling */
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 3px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: white;
+            color: #2c3e50;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.2), inset 0 2px 4px rgba(0,0,0,0.05);
+            transform: translateY(-1px);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.6;
+        }
+
+        .form-input[type="file"] {
+            padding: 0.75rem;
+            background: #f8f9fa;
+            cursor: pointer;
+        }
+
+        .form-input[type="file"]:hover {
+            background: #e9ecef;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .save-button {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .save-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .save-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .save-button.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .save-button.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast Notification Styles */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            max-width: 400px;
+        }
+
+        .toast {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-left: 4px solid #28a745;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        .toast.error {
+            border-left-color: #dc3545;
+        }
+
+        .toast.warning {
+            border-left-color: #ffc107;
+        }
+
+        .toast.info {
+            border-left-color: #17a2b8;
+        }
+
+        @keyframes slideIn {
+            to { transform: translateX(0); }
+        }
+
+        @keyframes slideOut {
+            to { transform: translateX(400px); opacity: 0; }
+        }
+
+        .toast-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: #2c3e50;
+        }
+
+        .toast-message {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .cancel-button {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(149, 165, 166, 0.3);
+        }
+
+        .cancel-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(149, 165, 166, 0.4);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-content h3 {
+            color: #2c3e50;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .image-preview {
+            max-width: 250px;
+            max-height: 250px;
+            border-radius: 12px;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 3px solid #ff6b35;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.4);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 3rem;
+            color: #666;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            border: 2px dashed #ddd;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.6;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #fee 0%, #fcc 100%);
+            color: #c33;
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-left: 6px solid #c33;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(204, 51, 51, 0.1);
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #efe 0%, #cfc 100%);
+            color: #363;
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-left: 6px solid #363;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(54, 102, 51, 0.1);
+        }
+
+        /* Enhanced Responsive Design for Admin Dashboard */
+
+        /* Large tablets and small laptops */
+        @media (max-width: 1024px) {
+            .admin-header-content {
+                padding: 0 1.5rem;
+            }
+            
+            .admin-content {
+                padding: 2.5rem 1.5rem;
+            }
+            
+            .section-panel {
+                padding: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        /* Tablets and large phones */
+        @media (max-width: 768px) {
+            .admin-header {
+                padding: 1rem 0;
+            }
+            
+            .admin-header-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+                padding: 0 1rem;
+            }
+            
+            .admin-title {
+                font-size: 1.8rem;
+            }
+            
+            .admin-nav {
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 0.4rem;
+            }
+            
+            .nav-button {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+                margin: 0.1rem;
+            }
+            
+            .admin-content {
+                padding: 2rem 1rem;
+            }
+            
+            .section-panel {
+                padding: 1.8rem;
+                margin-bottom: 1.5rem;
+                border-radius: 15px;
+            }
+            
+            .panel-header {
+                flex-direction: column;
+                gap: 1.2rem;
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+            
+            .panel-title {
+                font-size: 1.6rem;
+            }
+            
+            .add-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            
+            .data-grid {
+                gap: 1.2rem;
+            }
+            
+            .data-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+                padding: 1.5rem;
+            }
+            
+            .item-content {
+                text-align: center;
+            }
+            
+            .item-title {
+                font-size: 1.1rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .item-description {
+                font-size: 0.95rem;
+            }
+            
+            .item-actions {
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .action-button {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 1rem;
+                margin-bottom: 2rem;
+            }
+            
+            .stat-card {
+                padding: 1.5rem;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+            
+            .stat-label {
+                font-size: 0.9rem;
+            }
+            
+            .empty-state {
+                padding: 3rem 2rem;
+            }
+            
+            .empty-state-icon {
+                font-size: 3rem;
+            }
+            
+            .modal-content {
+                padding: 2rem;
+                margin: 1rem;
+                width: calc(100% - 2rem);
+                max-height: 85vh;
+                border-radius: 15px;
+            }
+            
+            .modal-content h3 {
+                font-size: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+            
+            .form-label {
+                font-size: 0.9rem;
+                margin-bottom: 0.6rem;
+            }
+            
+            .form-input, .form-textarea {
+                padding: 0.8rem 1rem;
+                font-size: 0.95rem;
+            }
+            
+            .form-textarea {
+                min-height: 100px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+                gap: 0.8rem;
+                margin-top: 2rem;
+            }
+            
+            .save-button, .cancel-button {
+                width: 100%;
+                padding: 0.9rem;
+                font-size: 0.95rem;
+            }
+            
+            .image-preview {
+                max-width: 200px;
+                max-height: 200px;
+            }
+        }
+
+        /* Small phones and mobile devices */
+        @media (max-width: 480px) {
+            .admin-header-content {
+                gap: 1rem;
+            }
+            
+            .admin-title {
+                font-size: 1.5rem;
+            }
+            
+            .admin-nav {
+                gap: 0.3rem;
+            }
+            
+            .nav-button {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            .logout-button {
+                margin-top: 0.5rem;
+            }
+            
+            .admin-content {
+                padding: 1.5rem 0.8rem;
+            }
+            
+            .section-panel {
+                padding: 1.5rem;
+                margin-bottom: 1.2rem;
+            }
+            
+            .panel-title {
+                font-size: 1.4rem;
+            }
+            
+            .add-button {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.85rem;
+            }
+            
+            .data-item {
+                padding: 1.2rem;
+                gap: 1rem;
+            }
+            
+            .item-title {
+                font-size: 1rem;
+            }
+            
+            .item-description {
+                font-size: 0.9rem;
+            }
+            
+            .action-button {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .stat-card {
+                padding: 1.2rem;
+            }
+            
+            .stat-number {
+                font-size: 1.8rem;
+            }
+            
+            .stat-label {
+                font-size: 0.85rem;
+            }
+            
+            .empty-state {
+                padding: 2.5rem 1.5rem;
+            }
+            
+            .empty-state-icon {
+                font-size: 2.5rem;
+                margin-bottom: 0.8rem;
+            }
+            
+            .modal-content {
+                padding: 1.5rem;
+                margin: 0.5rem;
+                width: calc(100% - 1rem);
+                max-height: 80vh;
+            }
+            
+            .modal-content h3 {
+                font-size: 1.3rem;
+                margin-bottom: 1.2rem;
+            }
+            
+            .form-group {
+                margin-bottom: 1.2rem;
+            }
+            
+            .form-label {
+                font-size: 0.85rem;
+            }
+            
+            .form-input, .form-textarea {
+                padding: 0.7rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            
+            .form-textarea {
+                min-height: 80px;
+            }
+            
+            .form-actions {
+                margin-top: 1.5rem;
+            }
+            
+            .save-button, .cancel-button {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+            
+            .image-preview {
+                max-width: 150px;
+                max-height: 150px;
+            }
+            
+            .loading {
+                padding: 2rem;
+                font-size: 1rem;
+            }
+            
+            .error-message,
+            .success-message {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Very small phones */
+        @media (max-width: 375px) {
+            .admin-title {
+                font-size: 1.3rem;
+            }
+            
+            .nav-button {
+                padding: 0.4rem 0.7rem;
+                font-size: 0.75rem;
+            }
+            
+            .panel-title {
+                font-size: 1.2rem;
+            }
+            
+            .modal-content {
+                padding: 1.2rem;
+            }
+            
+            .modal-content h3 {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Ultra small devices */
+        @media (max-width: 320px) {
+            .admin-header-content {
+                padding: 0 0.8rem;
+            }
+            
+            .admin-title {
+                font-size: 1.2rem;
+            }
+            
+            .nav-button {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.7rem;
+            }
+            
+            .admin-content {
+                padding: 1.2rem 0.5rem;
+            }
+            
+            .section-panel {
+                padding: 1.2rem;
+            }
+            
+            .panel-title {
+                font-size: 1.1rem;
+            }
+            
+            .modal-content {
+                padding: 1rem;
+                margin: 0.3rem;
+                width: calc(100% - 0.6rem);
+            }
+        }
+
+        /* Landscape orientation for mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .admin-header {
+                padding: 0.8rem 0;
+            }
+            
+            .admin-header-content {
+                flex-direction: row;
+                gap: 1rem;
+            }
+            
+            .admin-title {
+                font-size: 1.4rem;
+            }
+            
+            .admin-nav {
+                flex-wrap: nowrap;
+                gap: 0.3rem;
+            }
+            
+            .nav-button {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            .section-panel {
+                padding: 1.5rem;
+            }
+            
+            .data-item {
+                flex-direction: row;
+                text-align: left;
+                gap: 1rem;
+            }
+            
+            .item-content {
+                text-align: left;
+            }
+            
+            .item-actions {
+                justify-content: flex-end;
+            }
+        }
+
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .admin-header {
+                border-bottom-width: 2px;
+            }
+            
+            .form-input, .form-textarea {
+                border-width: 2px;
+            }
+            
+            .modal-content {
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            }
+        }
+
+        /* Additional enhancements for better visibility */
+        .form-input::placeholder, .form-textarea::placeholder {
+            color: #888;
+            font-weight: 400;
+        }
+
+        .form-input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.5rem;
+            transform: scale(1.2);
+        }
+
+        .form-group label:has(input[type="checkbox"]) {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        /* Scrollbar styling */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #ff6b35;
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #e55a2b;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-dashboard">
+        <header class="admin-header">
+            <div class="container">
+                <div class="admin-header-content">
+                    <div class="admin-title">🔥 FireGuard Pro Admin</div>
+                    <nav class="admin-nav">
+                        <button class="nav-button active" data-section="slider">Slider Images</button>
+                        <button class="nav-button" data-section="business">Business Details</button>
+                        <button class="nav-button" data-section="about">About Us</button>
+                        <button class="nav-button" data-section="location">Location</button>
+                        <button class="nav-button" data-section="videos">Videos</button>
+                        <button class="nav-button" data-section="sales">Sales</button>
+                        <button class="nav-button logout-button" id="logout-button">Back to Site</button>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <main class="admin-content">
+            <div class="container">
+                <!-- Slider Images Section -->
+                <div id="slider-section" class="section-panel active">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Manage Slider Images</h2>
+                        <button class="add-button" id="add-slider-image-button">+ Add Slider Image</button>
+                    </div>
+                    <div id="slider-images-list" class="data-grid">
+                        <div class="loading">Loading slider images...</div>
+                    </div>
+                </div>
+
+                <!-- Business Details Section -->
+                <div id="business-section" class="section-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Manage Business Details</h2>
+                    </div>
+                    <div id="business-content">
+                        <div class="loading">Loading business details...</div>
+                    </div>
+                </div>
+
+                <!-- About Us Section -->
+                <div id="about-section" class="section-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Manage About Us</h2>
+                    </div>
+                    <div id="about-content">
+                        <div class="loading">Loading about us content...</div>
+                    </div>
+                </div>
+
+                <!-- Location Section -->
+                <div id="location-section" class="section-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Manage Location</h2>
+                    </div>
+                    <div id="location-content">
+                        <div class="loading">Loading location data...</div>
+                    </div>
+                </div>
+
+                <!-- Videos Section -->
+                <div id="videos-section" class="section-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Manage Video (Single Video System)</h2>
+                        <button class="add-button" id="add-video-button">+ Upload New Video</button>
+                    </div>
+                    <div id="videos-list" class="data-grid">
+                        <div class="loading">Loading videos...</div>
+                    </div>
+                </div>
+
+                <!-- Sales Section -->
+                <div id="sales-section" class="section-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Manage Sales Records</h2>
+                        <button class="add-button" id="add-sale-button">+ Add Sale</button>
+                    </div>
+                    <div id="sales-list" class="data-grid">
+                        <div class="loading">Loading sales records...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="product-modal-title">Add Product</h3>
+            <form id="product-form">
+                <div class="form-group">
+                    <label for="product-title" class="form-label">Product Title</label>
+                    <input type="text" id="product-title" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-description" class="form-label">Description</label>
+                    <textarea id="product-description" class="form-textarea" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="product-price" class="form-label">Price (optional)</label>
+                    <input type="number" id="product-price" class="form-input" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="product-image" class="form-label">Product Image</label>
+                    <input type="file" id="product-image" class="form-input" accept="image/*">
+                    <img id="product-image-preview" class="image-preview" style="display: none;">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-button" id="cancel-product">Cancel</button>
+                    <button type="submit" class="save-button">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sale Modal -->
+    <div id="sale-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="sale-modal-title">Add Sale Record</h3>
+            <form id="sale-form">
+                <div class="form-group">
+                    <label for="sale-customer" class="form-label">Customer Name</label>
+                    <input type="text" id="sale-customer" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="sale-product" class="form-label">Product Name</label>
+                    <input type="text" id="sale-product" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="sale-date" class="form-label">Sale Date</label>
+                    <input type="date" id="sale-date" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="sale-receipt" class="form-label">Receipt Image (optional)</label>
+                    <input type="file" id="sale-receipt" class="form-input" accept="image/*">
+                    <img id="sale-receipt-preview" class="image-preview" style="display: none;">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-button" id="cancel-sale">Cancel</button>
+                    <button type="submit" class="save-button">Save Sale</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Business Details Modal -->
+    <div id="business-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="business-modal-title">Edit Business Details</h3>
+            <form id="business-form">
+                <div class="form-group">
+                    <label for="business-name" class="form-label">Business Name</label>
+                    <input type="text" id="business-name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="business-tagline" class="form-label">Tagline</label>
+                    <input type="text" id="business-tagline" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="business-description" class="form-label">Description</label>
+                    <textarea id="business-description" class="form-textarea" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="business-services" class="form-label">Services (one per line)</label>
+                    <textarea id="business-services" class="form-textarea" rows="6"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="business-phones" class="form-label">Phone Numbers (one per line)</label>
+                    <textarea id="business-phones" class="form-textarea" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="business-address" class="form-label">Address</label>
+                    <textarea id="business-address" class="form-textarea" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="business-facebook" class="form-label">Facebook Page</label>
+                    <input type="text" id="business-facebook" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="business-email" class="form-label">Email</label>
+                    <input type="email" id="business-email" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="business-image" class="form-label">Business Image</label>
+                    <input type="file" id="business-image" class="form-input" accept="image/*">
+                    <img id="business-image-preview" class="image-preview" style="display: none;">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-button" id="cancel-business">Cancel</button>
+                    <button type="submit" class="save-button">Save Business Details</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="video-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="video-modal-title">Add Video</h3>
+            <form id="video-form">
+                <div class="form-group">
+                    <label for="video-title" class="form-label">Video Title</label>
+                    <input type="text" id="video-title" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="video-description" class="form-label">Description</label>
+                    <textarea id="video-description" class="form-textarea" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="video-file" class="form-label">Video File</label>
+                    <input type="file" id="video-file" class="form-input" accept="video/*" required>
+                    <div id="video-file-info" style="margin-top: 10px; font-size: 0.9rem; color: #6c757d;"></div>
+                </div>
+                <div class="form-group">
+                    <label for="video-thumbnail" class="form-label">Thumbnail Image (optional)</label>
+                    <input type="file" id="video-thumbnail" class="form-input" accept="image/*">
+                    <img id="video-thumbnail-preview" class="image-preview" style="display: none; max-width: 200px; margin-top: 10px;">
+                </div>
+                <div class="form-group">
+                    <label for="video-order" class="form-label">Display Order</label>
+                    <input type="number" id="video-order" class="form-input" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="video-active" class="form-label">
+                        <input type="checkbox" id="video-active" checked> Active
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-button" id="cancel-video">Cancel</button>
+                    <button type="submit" class="save-button">Save Video</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Slider Image Modal -->
+    <div id="slider-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="slider-modal-title">Add Slider Image</h3>
+            <form id="slider-form">
+                <div class="form-group">
+                    <label for="slider-title" class="form-label">Image Title</label>
+                    <input type="text" id="slider-title" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="slider-description" class="form-label">Description</label>
+                    <textarea id="slider-description" class="form-textarea" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="slider-image" class="form-label">Slider Image</label>
+                    <input type="file" id="slider-image" class="form-input" accept="image/*" required>
+                    <img id="slider-image-preview" class="image-preview" style="display: none; max-width: 200px; margin-top: 10px;">
+                </div>
+                <div class="form-group">
+                    <label for="slider-contact-link" class="form-label">Contact Link</label>
+                    <input type="url" id="slider-contact-link" class="form-input" value="https://www.facebook.com/" required>
+                </div>
+                <div class="form-group">
+                    <label for="slider-contact-type" class="form-label">Contact Link Type</label>
+                    <select id="slider-contact-type" class="form-input" required>
+                        <option value="facebook">Facebook</option>
+                        <option value="messenger">Messenger</option>
+                        <option value="website">Website</option>
+                        <option value="phone">Phone</option>
+                        <option value="email">Email</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="slider-order" class="form-label">Display Order</label>
+                    <input type="number" id="slider-order" class="form-input" value="0" min="0" max="9">
+                    <small class="form-help">Maximum 10 images allowed (0-9)</small>
+                </div>
+                <div class="form-group">
+                    <label for="slider-active" class="form-label">
+                        <input type="checkbox" id="slider-active" checked> Active
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-button" id="cancel-slider">Cancel</button>
+                    <button type="submit" class="save-button">Save Slider Image</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
