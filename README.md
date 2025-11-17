@@ -91,15 +91,23 @@ Before deploying, ensure you have:
    - Import your Git repository (GitHub, GitLab, or Bitbucket)
 
 2. **Configure Project**:
-   - Framework Preset: **Static**
+   - Framework Preset: **Other** (important: select "Other", not "Static")
    - Root Directory: `./`
-   - Build Command: (leave empty - this is a static site)
+   - Build Command: (leave empty - Vercel will auto-detect this as static)
    - Output Directory: `./`
+   
+   **Note**: Vercel will automatically detect this as a static site since there's no package.json build script. The "Other" preset ensures proper static file serving.
 
 3. **Environment Variables** (Optional):
    - Add any environment variables if needed
+   
+4. **What Vercel Will Do**:
+   - Automatically detect this as a static site
+   - Deploy all HTML, CSS, and JavaScript files
+   - Handle the admin panel routing correctly
+   - Apply proper caching headers for performance
 
-4. **Deploy**:
+5. **Deploy**:
    - Click "Deploy" and wait for the build to complete
 
 #### Option B: Deploy via Vercel CLI
@@ -130,6 +138,11 @@ Before deploying, ensure you have:
 
 ### 4. Post-Deployment Configuration
 
+**Note**: The `vercel.json` configuration has been simplified to avoid conflicts between `routes` and modern configuration options like `rewrites` and `headers`. The current configuration uses:
+- `rewrites` for admin panel routing
+- `headers` for cache control
+- Simplified static file handling
+
 1. **Update Supabase URLs**:
    - After deployment, update your Supabase URLs to match your deployed domain
    - Add your Vercel domain to Supabase authentication settings
@@ -152,7 +165,7 @@ Before deploying, ensure you have:
 │   └── styles.css         # Admin styles
 ├── supabase/              # Database migrations
 │   └── complete-content-management.sql
-├── vercel.json            # Vercel configuration
+├── vercel.json            # Vercel configuration (simplified for static sites)
 ├── package.json           # Project configuration
 └── README.md              # This file
 ```
