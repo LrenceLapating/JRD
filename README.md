@@ -138,10 +138,9 @@ Before deploying, ensure you have:
 
 ### 4. Post-Deployment Configuration
 
-**Note**: The `vercel.json` configuration has been simplified to avoid conflicts between `routes` and modern configuration options like `rewrites` and `headers`. The current configuration uses:
-- `rewrites` for admin panel routing
-- `headers` for cache control
-- Simplified static file handling
+**Note**: The `vercel.json` configuration has been simplified to the minimal required setup. The current configuration only includes:
+- `rewrites` for admin panel routing (`/admin/*` → `/admin/$1`)
+- Basic static file handling (Vercel handles the rest automatically)
 
 1. **Update Supabase URLs**:
    - After deployment, update your Supabase URLs to match your deployed domain
@@ -205,6 +204,7 @@ Before deploying, ensure you have:
    - Make sure to click the 🔥 icon exactly 10 times
    - Check browser console for errors
    - Verify admin redirect URL is correct
+   - Note: Admin panel files are now cached like regular content (simplified configuration)
 
 4. **Content Not Loading**:
    - Check browser console for JavaScript errors
